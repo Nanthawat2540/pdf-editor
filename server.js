@@ -69,12 +69,13 @@ async function embedFont(pdfDoc) {
     catch { return await pdfDoc.embedFont(StandardFonts.TimesRoman); }
 }
 
-// Windows system TTF paths that support Thai (Unicode) — tried in order
-const WIN_FONTS = {
-    regular:    ['C:\\Windows\\Fonts\\arial.ttf',    'C:\\Windows\\Fonts\\segoeui.ttf',  'C:\\Windows\\Fonts\\tahoma.ttf'],
-    bold:       ['C:\\Windows\\Fonts\\arialbd.ttf',  'C:\\Windows\\Fonts\\segoeuib.ttf', 'C:\\Windows\\Fonts\\tahomabd.ttf'],
-    italic:     ['C:\\Windows\\Fonts\\ariali.ttf',   'C:\\Windows\\Fonts\\segoeuii.ttf', 'C:\\Windows\\Fonts\\arial.ttf'],
-    bolditalic: ['C:\\Windows\\Fonts\\arialbi.ttf',  'C:\\Windows\\Fonts\\segoeuiz.ttf', 'C:\\Windows\\Fonts\\arialbd.ttf']
+// Bundled fonts (cross-platform, Thai Unicode support)
+const BUNDLED = path.join(__dirname, 'fonts');
+const FONT_PATHS = {
+    regular:    [path.join(BUNDLED, 'Sarabun-Regular.ttf'),    'C:\\Windows\\Fonts\\arial.ttf',   'C:\\Windows\\Fonts\\segoeui.ttf'],
+    bold:       [path.join(BUNDLED, 'Sarabun-Bold.ttf'),       'C:\\Windows\\Fonts\\arialbd.ttf', 'C:\\Windows\\Fonts\\segoeuib.ttf'],
+    italic:     [path.join(BUNDLED, 'Sarabun-Italic.ttf'),     'C:\\Windows\\Fonts\\ariali.ttf',  'C:\\Windows\\Fonts\\segoeuii.ttf'],
+    bolditalic: [path.join(BUNDLED, 'Sarabun-BoldItalic.ttf'), 'C:\\Windows\\Fonts\\arialbi.ttf', 'C:\\Windows\\Fonts\\segoeuiz.ttf']
 };
 
 // Embed a Unicode-capable TTF; cache per (pdfDoc request) via the cache Map.
@@ -84,7 +85,7 @@ async function embedUnicodeFont(pdfDoc, bold, italic, cache) {
 
     pdfDoc.registerFontkit(fontkit);
 
-    const paths = WIN_FONTS[variant] || WIN_FONTS.regular;
+    const paths = FONT_PATHS[variant] || FONT_PATHS.regular;
     for (const p of paths) {
         try {
             const bytes = await fs.readFile(p);
