@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Editor Pro — PasTechs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -12,11 +14,19 @@
     <!-- Upload Screen -->
     <div id="upload-screen" class="screen active">
         <div class="upload-hero">
-            <div class="app-logo-big">&#128196; PDF Editor Pro</div>
+            <div class="app-logo-big">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <rect width="30" height="30" rx="8" fill="url(#lg)"/>
+                    <path d="M8 7h9l5 5v11a1 1 0 01-1 1H8a1 1 0 01-1-1V8a1 1 0 011-1z" fill="white" fill-opacity="0.9"/>
+                    <path d="M17 7l5 5h-4a1 1 0 01-1-1V7z" fill="white" fill-opacity="0.4"/>
+                    <defs><linearGradient id="lg" x1="0" y1="0" x2="30" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+                </svg>
+                PDF Editor Pro
+            </div>
             <div id="drop-zone" class="drop-zone-big">
                 <div class="dz-icon" style="font-size:48px;margin-bottom:12px;">&#128196;</div>
-                <p class="dz-main" style="font-size:16px;font-weight:500;margin-bottom:4px;">ลากไฟล์ PDF มาวางที่นี่</p>
-                <p style="color:#94a3b8;font-size:13px;margin-bottom:20px;">หรือ</p>
+                <p class="dz-main">ลากไฟล์ PDF มาวางที่นี่</p>
+                <p class="dz-sub">หรือเลือกจากเครื่อง</p>
                 <button class="btn-primary" id="btn-choose-file">เลือกไฟล์ PDF</button>
                 <input type="file" id="file-input" accept=".pdf" style="display:none">
             </div>
@@ -34,7 +44,7 @@
         <header class="app-header">
             <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
                 <button class="btn-icon" id="btn-back" title="กลับ">&#8592;</button>
-                <span style="font-weight:700;font-size:14px;color:#6366f1;">&#128196; PDF Pro</span>
+                <span style="font-weight:700;font-size:14px;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">PDF Pro</span>
                 <span id="file-name" class="file-name">ไฟล์</span>
                 <span id="page-badge" class="badge">0 หน้า</span>
                 <div class="zoom-controls">
@@ -488,6 +498,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js"></script>
-<script src="/js/app.js?v=7"></script>
+<script src="/js/app.js?v=8"></script>
 </body>
 </html>
