@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Editor — PasTechs</title>
+    <title>PDF Editor Pro — PasTechs</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -11,148 +11,423 @@
 
     <!-- Upload Screen -->
     <div id="upload-screen" class="screen active">
-        <div class="upload-center">
-            <div class="brand">
-                <div class="brand-icon">PDF</div>
-                <h1>PDF Editor</h1>
-                <p>แก้ไข เซ็นชื่อ รวม แยก และกรอกฟอร์ม PDF ได้ทันที</p>
-            </div>
-            <div id="drop-zone" class="drop-zone">
-                <div class="dz-icon">📄</div>
-                <p class="dz-main">ลากไฟล์ PDF มาวางที่นี่</p>
-                <p class="dz-sub">หรือ</p>
+        <div class="upload-hero">
+            <div class="app-logo-big">&#128196; PDF Editor Pro</div>
+            <div id="drop-zone" class="drop-zone-big">
+                <div class="dz-icon" style="font-size:48px;margin-bottom:12px;">&#128196;</div>
+                <p class="dz-main" style="font-size:16px;font-weight:500;margin-bottom:4px;">ลากไฟล์ PDF มาวางที่นี่</p>
+                <p style="color:#94a3b8;font-size:13px;margin-bottom:20px;">หรือ</p>
                 <button class="btn-primary" id="btn-choose-file">เลือกไฟล์ PDF</button>
                 <input type="file" id="file-input" accept=".pdf" style="display:none">
             </div>
-            <div class="quick-actions">
-                <button class="qa-btn" id="qa-merge">
-                    <span>🔗</span><span>รวม PDF</span>
-                </button>
-                <button class="qa-btn" id="qa-split">
-                    <span>✂️</span><span>แยก PDF</span>
-                </button>
+            <div style="display:flex;gap:12px;margin-top:20px;">
+                <button class="qa-btn" id="qa-merge"><span>&#128279;</span><span>รวม PDF</span></button>
+                <button class="qa-btn" id="qa-img2pdf"><span>&#128247;</span><span>รูป → PDF</span></button>
             </div>
         </div>
     </div>
 
     <!-- Editor Screen -->
     <div id="editor-screen" class="screen">
-        <header class="editor-header">
-            <div class="hd-left">
+
+        <!-- Header -->
+        <header class="app-header">
+            <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
                 <button class="btn-icon" id="btn-back" title="กลับ">&#8592;</button>
+                <span style="font-weight:700;font-size:14px;color:#6366f1;">&#128196; PDF Pro</span>
                 <span id="file-name" class="file-name">ไฟล์</span>
                 <span id="page-badge" class="badge">0 หน้า</span>
+                <div class="zoom-controls">
+                    <button class="btn-zoom" id="btn-zoom-out" title="ย่อ">&#8722;</button>
+                    <span id="zoom-label" class="zoom-label">100%</span>
+                    <button class="btn-zoom" id="btn-zoom-in" title="ขยาย">+</button>
+                </div>
             </div>
-            <div class="hd-right">
-                <button class="btn-outline" id="btn-reset">ล้าง</button>
-                <button class="btn-primary" id="btn-download">⬇ บันทึก &amp; ดาวน์โหลด</button>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                <button class="btn-icon" id="btn-undo" title="เลิกทำ (Ctrl+Z)">&#8617;</button>
+                <button class="btn-icon" id="btn-redo" title="ทำซ้ำ (Ctrl+Y)">&#8618;</button>
+                <button class="btn-outline btn-sm" id="btn-reset">ล้าง</button>
+                <button class="btn-outline btn-sm" id="btn-save-version" title="บันทึก Version">&#128337; Version</button>
+                <button class="btn-primary" id="btn-download">&#11015; บันทึก &amp; ดาวน์โหลด</button>
             </div>
         </header>
 
         <div class="editor-body">
-            <!-- Left Toolbar -->
-            <aside class="toolbar">
-                <button class="tool-btn active" data-tool="select">
-                    <span class="t-icon">&#10513;</span>
-                    <span class="t-label">เลือก</span>
+
+            <!-- Icon Sidebar -->
+            <nav class="tool-sidebar">
+                <button class="sidebar-icon active" data-tab="edit" title="แก้ไข">
+                    <span style="font-size:18px;">T</span>
+                    <span>แก้ไข</span>
                 </button>
-                <button class="tool-btn" data-tool="text">
-                    <span class="t-icon">T</span>
-                    <span class="t-label">ข้อความ</span>
+                <button class="sidebar-icon" data-tab="annotate" title="บันทึก">
+                    <span style="font-size:18px;">&#9999;</span>
+                    <span>บันทึก</span>
                 </button>
-                <button class="tool-btn" data-tool="signature">
-                    <span class="t-icon">&#9997;</span>
-                    <span class="t-label">ลายเซ็น</span>
+                <button class="sidebar-icon" data-tab="sign" title="เซ็น/ตรา">
+                    <span style="font-size:18px;">&#9997;</span>
+                    <span>เซ็น/ตรา</span>
                 </button>
-                <button class="tool-btn" data-tool="stamp">
-                    <span class="t-icon">&#128444;</span>
-                    <span class="t-label">ตรายาง</span>
+                <button class="sidebar-icon" data-tab="pages" title="หน้า">
+                    <span style="font-size:18px;">&#128196;</span>
+                    <span>หน้า</span>
                 </button>
-                <div class="tool-sep"></div>
-                <button class="tool-btn" data-tool="merge">
-                    <span class="t-icon">&#128279;</span>
-                    <span class="t-label">รวม</span>
+                <button class="sidebar-icon" data-tab="ocr" title="OCR">
+                    <span style="font-size:18px;">&#128269;</span>
+                    <span>OCR</span>
                 </button>
-                <button class="tool-btn" data-tool="split">
-                    <span class="t-icon">&#9986;</span>
-                    <span class="t-label">แยก</span>
+                <button class="sidebar-icon" data-tab="versions" title="Version">
+                    <span style="font-size:18px;">&#128337;</span>
+                    <span>Version</span>
                 </button>
-                <button class="tool-btn" data-tool="forms">
-                    <span class="t-icon">&#128203;</span>
-                    <span class="t-label">ฟอร์ม</span>
+                <button class="sidebar-icon" data-tab="workflow" title="Workflow">
+                    <span style="font-size:18px;">&#9989;</span>
+                    <span>Workflow</span>
                 </button>
+            </nav>
+
+            <!-- Left Panel -->
+            <aside class="tool-panel">
+
+                <!-- Edit Panel -->
+                <div class="panel-section active" id="tab-edit">
+                    <div class="panel-title">&#9998; แก้ไขเนื้อหา</div>
+                    <div class="tool-grid">
+                        <button class="tool-btn active" data-tool="edittext">
+                            <span style="font-size:18px;">&#9997;</span>
+                            <span>แก้ข้อความ</span>
+                        </button>
+                        <button class="tool-btn" data-tool="text">
+                            <span style="font-size:18px;">T</span>
+                            <span>เพิ่มข้อความ</span>
+                        </button>
+                        <button class="tool-btn" data-tool="whiteout">
+                            <span style="font-size:18px;">&#11036;</span>
+                            <span>ลบข้อความ</span>
+                        </button>
+                        <button class="tool-btn" data-tool="forms">
+                            <span style="font-size:18px;">&#128203;</span>
+                            <span>ฟอร์ม</span>
+                        </button>
+                    </div>
+
+                    <!-- Shared Word-style toolbar (for edittext + text panels) -->
+                    <div class="word-toolbar" id="shared-word-toolbar">
+                        <div class="wtb-row">
+                            <select class="fmt-font" title="ฟอนต์">
+                                <option value="helvetica">Sans-Serif</option>
+                                <option value="times">Serif</option>
+                                <option value="courier">Mono</option>
+                            </select>
+                            <input type="number" class="fmt-size" value="14" min="6" max="96" title="ขนาด (pt)">
+                            <input type="color" class="fmt-color" value="#000000" title="สีข้อความ">
+                        </div>
+                        <div class="wtb-row">
+                            <button class="fmt-btn fmt-bold" title="ตัวหนา (B)"><b>B</b></button>
+                            <button class="fmt-btn fmt-italic" title="ตัวเอียง (I)"><i>I</i></button>
+                            <button class="fmt-btn fmt-underline" title="ขีดเส้นใต้ (U)"><u>U</u></button>
+                            <div class="wtb-preview-box">
+                                <span class="wtb-preview">Aa ข</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-panels for edit tools -->
+                    <div id="panel-edittext" class="panel active">
+                        <p class="panel-hint">คลิกบนข้อความใน PDF เพื่อแก้ไข<br>ใช้ Toolbar ด้านบนตั้งค่า ตัวหนา / ตัวเอียง / ขนาด<br><strong>Enter</strong> = บันทึก &nbsp; <strong>Esc</strong> = ยกเลิก</p>
+                    </div>
+                    <div id="panel-text" class="panel">
+                        <p class="panel-hint">คลิกบนหน้า PDF เพื่อวางข้อความ</p>
+                    </div>
+                    <div id="panel-whiteout" class="panel">
+                        <p class="panel-hint">คลิกแล้วลากบน PDF เพื่อวาดกรอบสีขาวปิดทับข้อความเดิม</p>
+                    </div>
+                    <div id="panel-forms" class="panel">
+                        <div id="form-fields-list">
+                            <p class="empty-hint">ไม่พบ form fields<br>ใน PDF นี้</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Annotate Panel -->
+                <div class="panel-section" id="tab-annotate">
+                    <div class="panel-title">&#9999; Annotate</div>
+                    <div class="tool-grid">
+                        <button class="tool-btn" data-tool="highlight">
+                            <span style="font-size:18px;">&#128396;</span>
+                            <span>ไฮไลท์</span>
+                        </button>
+                        <button class="tool-btn" data-tool="draw">
+                            <span style="font-size:18px;">&#9998;</span>
+                            <span>วาดอิสระ</span>
+                        </button>
+                        <button class="tool-btn" data-tool="shape">
+                            <span style="font-size:18px;">&#11042;</span>
+                            <span>รูปทรง</span>
+                        </button>
+                    </div>
+
+                    <div id="panel-highlight" class="panel active">
+                        <p class="panel-hint">คลิกแล้วลากบน PDF เพื่อวาดไฮไลท์</p>
+                        <div class="form-row">
+                            <label>สี</label>
+                            <input type="color" id="hl-color" value="#ffff00">
+                        </div>
+                        <div class="form-row">
+                            <label>ความทึบ</label>
+                            <input type="range" id="hl-opacity" min="5" max="90" value="40">
+                            <span id="hl-opacity-val" class="range-val">40%</span>
+                        </div>
+                    </div>
+                    <div id="panel-draw" class="panel">
+                        <p class="panel-hint">วาดบนหน้า PDF โดยตรง กด "บันทึกการวาด" เมื่อต้องการรวมลงใน PDF</p>
+                        <div class="form-row">
+                            <label>สี</label>
+                            <input type="color" id="draw-color" value="#ff0000">
+                        </div>
+                        <div class="form-row">
+                            <label>ขนาดปลาย (px)</label>
+                            <input type="number" id="draw-width" value="3" min="1" max="30">
+                        </div>
+                        <div class="draw-btns">
+                            <button class="btn-outline btn-sm" id="draw-clear">ล้างการวาด</button>
+                            <button class="btn-primary btn-sm" id="draw-save">บันทึกการวาด</button>
+                        </div>
+                    </div>
+                    <div id="panel-shape" class="panel">
+                        <p class="panel-hint">คลิกแล้วลากบน PDF เพื่อวาดรูปทรง</p>
+                        <div class="form-row">
+                            <label>ชนิด</label>
+                            <div class="shape-type-btns">
+                                <button class="shape-type-btn active" data-shape="rect" title="สี่เหลี่ยม">&#9645;</button>
+                                <button class="shape-type-btn" data-shape="ellipse" title="วงรี">&#11093;</button>
+                                <button class="shape-type-btn" data-shape="line" title="เส้น">&#9585;</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label>สี</label>
+                            <input type="color" id="shape-color" value="#ff0000">
+                        </div>
+                        <div class="form-row">
+                            <label>ความหนา (pt)</label>
+                            <input type="number" id="shape-border" value="2" min="1" max="20">
+                        </div>
+                    </div>
+                    <div id="panel-select" class="panel">
+                        <h3 style="font-size:13px;font-weight:600;margin-bottom:10px;">รายการแก้ไข</h3>
+                        <div id="annotation-list" class="annotation-list">
+                            <p class="empty-hint">ยังไม่มีรายการ<br>เลือกเครื่องมือเพื่อเริ่ม</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sign Panel -->
+                <div class="panel-section" id="tab-sign">
+                    <div class="panel-title">&#9997; เซ็นชื่อ / ตรายาง</div>
+                    <div class="tool-grid">
+                        <button class="tool-btn" data-tool="signature">
+                            <span style="font-size:18px;">&#9997;</span>
+                            <span>ลายเซ็น</span>
+                        </button>
+                        <button class="tool-btn" data-tool="stamp">
+                            <span style="font-size:18px;">&#128444;</span>
+                            <span>ตรายาง</span>
+                        </button>
+                        <button class="tool-btn" data-tool="watermark">
+                            <span style="font-size:18px;">&#128167;</span>
+                            <span>ลายน้ำ</span>
+                        </button>
+                    </div>
+
+                    <div id="panel-signature" class="panel active">
+                        <p class="panel-hint">วาดลายเซ็นด้านล่าง แล้วคลิก "ใช้ลายเซ็น"</p>
+                        <canvas id="sig-canvas" width="240" height="130"></canvas>
+                        <div class="sig-btns">
+                            <button class="btn-outline btn-sm" id="sig-clear">ล้าง</button>
+                            <button class="btn-primary btn-sm" id="sig-use">ใช้ลายเซ็น</button>
+                        </div>
+                        <p id="sig-status" class="status-hint"></p>
+                    </div>
+                    <div id="panel-stamp" class="panel">
+                        <p class="panel-hint">อัปโหลดรูปแล้วคลิกบน PDF เพื่อวาง</p>
+                        <button class="btn-outline w-full" id="stamp-upload-btn">&#128247; เลือกรูปภาพ</button>
+                        <input type="file" id="stamp-file" accept="image/*" style="display:none">
+                        <div id="stamp-preview"></div>
+                        <p id="stamp-status" class="status-hint"></p>
+                        <div class="form-row mt-8">
+                            <label>ความกว้าง (pt)</label>
+                            <input type="number" id="stamp-width" value="150" min="20" max="500">
+                        </div>
+                    </div>
+                    <div id="panel-watermark" class="panel">
+                        <p class="panel-hint">ใส่ลายน้ำทุกหน้าใน PDF</p>
+                        <div class="form-row">
+                            <label>ข้อความ</label>
+                            <input type="text" id="wm-text" value="CONFIDENTIAL" style="width:130px">
+                        </div>
+                        <div class="form-row">
+                            <label>ขนาด (pt)</label>
+                            <input type="number" id="wm-size" value="60" min="10" max="150">
+                        </div>
+                        <div class="form-row">
+                            <label>สี</label>
+                            <input type="color" id="wm-color" value="#888888">
+                        </div>
+                        <div class="form-row">
+                            <label>ความโปร่งใส</label>
+                            <input type="range" id="wm-opacity" min="5" max="80" value="30">
+                            <span id="wm-opacity-val" class="range-val">30%</span>
+                        </div>
+                        <div class="form-row">
+                            <label>มุมเอียง °</label>
+                            <input type="number" id="wm-rotation" value="-45" min="-90" max="90">
+                        </div>
+                        <button class="btn-primary w-full mt-8" id="btn-do-watermark">&#128167; ใส่ลายน้ำ &amp; ดาวน์โหลด</button>
+                    </div>
+                </div>
+
+                <!-- Pages Panel -->
+                <div class="panel-section" id="tab-pages">
+                    <div class="panel-title">&#128196; จัดการหน้า</div>
+                    <div class="tool-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                        <button class="tool-btn" data-tool="pagemgr" style="min-height:50px;">
+                            <span>&#128209;</span><span>หน้า</span>
+                        </button>
+                        <button class="tool-btn" data-tool="merge" style="min-height:50px;">
+                            <span>&#128279;</span><span>รวม</span>
+                        </button>
+                        <button class="tool-btn" data-tool="split" style="min-height:50px;">
+                            <span>&#9986;</span><span>แยก</span>
+                        </button>
+                        <button class="tool-btn" data-tool="headfoot" style="min-height:50px;">
+                            <span>&#128203;</span><span>หัว/ท้าย</span>
+                        </button>
+                        <button class="tool-btn" data-tool="compress" style="min-height:50px;">
+                            <span>&#128476;</span><span>บีบอัด</span>
+                        </button>
+                        <button class="tool-btn" data-tool="img2pdf" style="min-height:50px;">
+                            <span>&#128247;</span><span>รูป→PDF</span>
+                        </button>
+                    </div>
+
+                    <div id="panel-pagemgr" class="panel active">
+                        <p class="panel-hint">หมุน หรือลบหน้าที่ต้องการ แล้วกด "Apply"</p>
+                        <div id="pagemgr-list" class="pagemgr-list"></div>
+                        <button class="btn-primary w-full mt-8" id="btn-do-pagemgr">&#10004; Apply &amp; ดาวน์โหลด</button>
+                    </div>
+                    <div id="panel-split" class="panel">
+                        <p class="panel-hint">ระบุช่วงหน้าที่ต้องการแยก<br>เช่น <code>1-3</code> หรือ <code>1,3,5</code></p>
+                        <div id="split-ranges">
+                            <div class="split-row">
+                                <input type="text" class="range-input" placeholder="เช่น 1-3">
+                                <button class="remove-range">&#10005;</button>
+                            </div>
+                        </div>
+                        <button class="btn-outline w-full mt-4" id="add-range">+ เพิ่มส่วน</button>
+                        <button class="btn-primary w-full mt-8" id="btn-do-split">&#9986; แยกและดาวน์โหลด</button>
+                    </div>
+                    <div id="panel-headfoot" class="panel">
+                        <p class="panel-hint">เพิ่มข้อความหัว/ท้ายทุกหน้า</p>
+                        <div class="form-row">
+                            <label>หัวกระดาษ</label>
+                            <input type="text" id="hf-header" placeholder="ข้อความบนสุด" style="width:130px">
+                        </div>
+                        <div class="form-row">
+                            <label>ท้ายกระดาษ</label>
+                            <input type="text" id="hf-footer" placeholder="ข้อความล่างสุด" style="width:130px">
+                        </div>
+                        <div class="form-row">
+                            <label>เพิ่มเลขหน้า</label>
+                            <input type="checkbox" id="hf-pagenum">
+                        </div>
+                        <div class="form-row">
+                            <label>เริ่มต้นที่</label>
+                            <input type="number" id="hf-startpage" value="1" min="1" style="width:70px">
+                        </div>
+                        <div class="form-row">
+                            <label>ขนาดตัวอักษร</label>
+                            <input type="number" id="hf-fontsize" value="11" min="6" max="24">
+                        </div>
+                        <button class="btn-primary w-full mt-8" id="btn-do-headfoot">&#128203; Apply &amp; ดาวน์โหลด</button>
+                    </div>
+                    <div id="panel-compress" class="panel">
+                        <p class="panel-hint">บีบอัดขนาดไฟล์ PDF</p>
+                        <button class="btn-primary w-full" id="btn-do-compress">&#128476; บีบอัด &amp; ดาวน์โหลด</button>
+                    </div>
+                </div>
+
+                <!-- OCR Panel -->
+                <div class="panel-section" id="tab-ocr">
+                    <div class="panel-title">&#128269; OCR ถอดข้อความ</div>
+                    <div class="form-row" style="margin-bottom:12px;">
+                        <label>ภาษา</label>
+                        <select id="ocr-lang">
+                            <option value="tha">ไทย</option>
+                            <option value="eng">อังกฤษ</option>
+                            <option value="tha+eng">ไทย + อังกฤษ</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary w-full" id="btn-ocr-page" style="margin-bottom:8px;">&#128269; OCR หน้าปัจจุบัน</button>
+                    <button class="btn-outline w-full" id="btn-ocr-all">&#128269; OCR ทุกหน้า</button>
+                    <div class="progress-bar" style="margin-top:12px;">
+                        <div id="ocr-progress-fill" style="height:100%;background:#6366f1;width:0;transition:width 0.3s;border-radius:3px;"></div>
+                    </div>
+                    <p id="ocr-status" style="font-size:11px;color:#94a3b8;margin:4px 0 8px;min-height:16px;"></p>
+                    <div id="ocr-results"></div>
+                </div>
+
+                <!-- Versions Panel -->
+                <div class="panel-section" id="tab-versions">
+                    <div class="panel-title">&#128337; Version Control</div>
+                    <div style="margin-bottom:16px;padding:12px;background:#374151;border-radius:8px;">
+                        <div class="form-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                            <label style="font-size:12px;color:#94a3b8;">ชื่อ Version</label>
+                            <input type="text" id="version-name-input" placeholder="เช่น v1.0 ร่างแรก" style="width:100%;">
+                        </div>
+                        <div class="form-row" style="flex-direction:column;align-items:flex-start;gap:6px;margin-top:8px;">
+                            <label style="font-size:12px;color:#94a3b8;">รายละเอียด</label>
+                            <input type="text" id="version-desc-input" placeholder="บันทึกเพิ่มเติม..." style="width:100%;">
+                        </div>
+                        <button class="btn-primary w-full mt-8" id="btn-save-version-panel">&#128190; บันทึก Version</button>
+                    </div>
+                    <div id="version-list">
+                        <p class="empty-hint">ยังไม่มี Version</p>
+                    </div>
+                </div>
+
+                <!-- Workflow Panel -->
+                <div class="panel-section" id="tab-workflow">
+                    <div class="panel-title">&#9989; Approval Workflow</div>
+                    <button class="btn-primary w-full" id="btn-create-workflow" style="margin-bottom:12px;">+ สร้าง Workflow</button>
+
+                    <div id="workflow-create-form" style="display:none;background:#374151;border-radius:8px;padding:12px;margin-bottom:16px;">
+                        <div class="form-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                            <label style="font-size:12px;color:#94a3b8;">ชื่อ Workflow</label>
+                            <input type="text" id="workflow-title-input" placeholder="เช่น อนุมัติใบสัญญา" style="width:100%;">
+                        </div>
+                        <div style="margin-top:10px;">
+                            <div style="font-size:12px;color:#94a3b8;margin-bottom:6px;">ขั้นตอนการอนุมัติ</div>
+                            <div id="workflow-steps-container"></div>
+                            <button class="btn-outline w-full btn-sm" id="btn-add-step" style="margin-top:6px;">+ เพิ่มขั้นตอน</button>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:12px;">
+                            <button class="btn-outline btn-sm" id="btn-cancel-workflow" style="flex:1;">ยกเลิก</button>
+                            <button class="btn-primary btn-sm" id="btn-submit-workflow" style="flex:1;">สร้าง</button>
+                        </div>
+                    </div>
+
+                    <div id="workflow-list">
+                        <p class="empty-hint">ยังไม่มี Workflow</p>
+                    </div>
+                </div>
+
             </aside>
 
             <!-- PDF Viewer -->
-            <div class="viewer-wrap" id="viewer-wrap">
+            <div class="viewer-area" id="viewer-wrap">
                 <div id="pages-container"></div>
             </div>
 
-            <!-- Right Panel -->
-            <aside class="right-panel">
-                <div id="panel-select" class="panel active">
-                    <h3>รายการแก้ไข</h3>
-                    <div id="annotation-list" class="annotation-list">
-                        <p class="empty-hint">ยังไม่มีรายการ<br>เลือกเครื่องมือด้านซ้ายเพื่อเริ่ม</p>
-                    </div>
-                </div>
-                <div id="panel-text" class="panel">
-                    <h3>เพิ่มข้อความ</h3>
-                    <p class="panel-hint">คลิกบนหน้า PDF เพื่อวางข้อความ</p>
-                    <div class="form-row">
-                        <label>ขนาด (pt)</label>
-                        <input type="number" id="text-size" value="14" min="6" max="96">
-                    </div>
-                    <div class="form-row">
-                        <label>สี</label>
-                        <input type="color" id="text-color" value="#000000">
-                    </div>
-                    <div class="form-row">
-                        <label>ความโปร่งใส</label>
-                        <input type="range" id="text-opacity" min="10" max="100" value="100">
-                    </div>
-                </div>
-                <div id="panel-signature" class="panel">
-                    <h3>ลายเซ็น</h3>
-                    <p class="panel-hint">วาดลายเซ็นด้านล่าง แล้วคลิก "ใช้ลายเซ็น"</p>
-                    <canvas id="sig-canvas" width="240" height="130"></canvas>
-                    <div class="sig-btns">
-                        <button class="btn-outline btn-sm" id="sig-clear">ล้าง</button>
-                        <button class="btn-primary btn-sm" id="sig-use">ใช้ลายเซ็น</button>
-                    </div>
-                    <p id="sig-status" class="status-hint"></p>
-                </div>
-                <div id="panel-stamp" class="panel">
-                    <h3>ตรายาง / รูปภาพ</h3>
-                    <p class="panel-hint">อัปโหลดรูปแล้วคลิกบน PDF เพื่อวาง</p>
-                    <button class="btn-outline w-full" id="stamp-upload-btn">&#128247; เลือกรูปภาพ</button>
-                    <input type="file" id="stamp-file" accept="image/*" style="display:none">
-                    <div id="stamp-preview"></div>
-                    <p id="stamp-status" class="status-hint"></p>
-                    <div class="form-row mt-8">
-                        <label>ความกว้าง (pt)</label>
-                        <input type="number" id="stamp-width" value="150" min="20" max="500">
-                    </div>
-                </div>
-                <div id="panel-forms" class="panel">
-                    <h3>กรอกฟอร์ม</h3>
-                    <div id="form-fields-list">
-                        <p class="empty-hint">ไม่พบ form fields<br>ใน PDF นี้</p>
-                    </div>
-                </div>
-                <div id="panel-split" class="panel">
-                    <h3>แยก PDF</h3>
-                    <p class="panel-hint">ระบุช่วงหน้าที่ต้องการแยก<br>เช่น <code>1-3</code> หรือ <code>1,3,5</code></p>
-                    <div id="split-ranges">
-                        <div class="split-row">
-                            <input type="text" class="range-input" placeholder="เช่น 1-3">
-                            <button class="remove-range">&#10005;</button>
-                        </div>
-                    </div>
-                    <button class="btn-outline w-full mt-4" id="add-range">+ เพิ่มส่วน</button>
-                    <button class="btn-primary w-full mt-8" id="btn-do-split">&#9986; แยกและดาวน์โหลด</button>
-                </div>
-            </aside>
         </div>
     </div>
 
@@ -174,7 +449,28 @@
         </div>
         <div class="modal-ft">
             <button class="btn-outline" id="merge-cancel">ยกเลิก</button>
-            <button class="btn-primary" id="btn-do-merge">🔗 รวมและดาวน์โหลด</button>
+            <button class="btn-primary" id="btn-do-merge">&#128279; รวมและดาวน์โหลด</button>
+        </div>
+    </div>
+</div>
+
+<!-- Image → PDF Modal -->
+<div id="img2pdf-modal" class="modal-overlay" style="display:none">
+    <div class="modal">
+        <div class="modal-hd">
+            <h2>รูปภาพ → PDF</h2>
+            <button class="modal-close" id="img2pdf-close">&#10005;</button>
+        </div>
+        <div class="modal-bd">
+            <div id="img2pdf-drop" class="drop-zone small">
+                <p>คลิกหรือลากไฟล์ JPG/PNG มาวาง (สูงสุด 30 รูป)</p>
+                <input type="file" id="img2pdf-file-input" accept="image/jpeg,image/png" multiple>
+            </div>
+            <div id="img2pdf-list"></div>
+        </div>
+        <div class="modal-ft">
+            <button class="btn-outline" id="img2pdf-cancel">ยกเลิก</button>
+            <button class="btn-primary" id="btn-do-img2pdf">&#128247; สร้าง PDF</button>
         </div>
     </div>
 </div>
@@ -187,7 +483,11 @@
     </div>
 </div>
 
+<!-- Toast -->
+<div id="toast" class="toast" style="display:none"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="/js/app.js"></script>
+<script src="https://unpkg.com/tesseract.js@4.1.4/dist/tesseract.min.js"></script>
+<script src="/js/app.js?v=7"></script>
 </body>
 </html>
